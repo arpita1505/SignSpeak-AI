@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv/
+venv/
+ENV/
+env/
+.vscode/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+package-lock.json
+yarn.lock
+dist/
+build/
+*.log
+
+# ML artifacts (except model metadata)
+data/raw/
+data/processed/
+*.joblib
+*.pkl
+*.model
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# Temporary
+*.tmp
+temp/
+cache/
+
+# Large files
+*.tar.gz
+*.zip

@@ -1,0 +1,122 @@
+.prediction-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-section h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sign-display {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #667eea;
+  text-align: center;
+  line-height: 1;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.confidence-bar {
+  width: 100%;
+  height: 24px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #48bb78, #38a169);
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+.confidence-value {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+}
+
+.status-text {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+
+.status-waiting {
+  color: #7c2d12;
+  background: #fed7aa;
+}
+
+.status-processing {
+  color: #2c5282;
+  background: #bee3f8;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.status-stable {
+  color: #22543d;
+  background: #c6f6d5;
+}
+
+.status-warning {
+  color: #7c2d12;
+  background: #fed7aa;
+}
+
+.status-error {
+  color: #742a2a;
+  background: #fbd38d;
+}
+
+.hands-info {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  .prediction-card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .sign-display {
+    font-size: 2.5rem;
+  }
+
+  .card-section h3 {
+    font-size: 0.85rem;
+  }
+}
