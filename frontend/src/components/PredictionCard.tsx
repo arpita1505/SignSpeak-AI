@@ -1,4 +1,4 @@
-"""Prediction Card component."""
+// Prediction Card component.
 import { PredictionEvent } from '../types/api'
 import './PredictionCard.css'
 

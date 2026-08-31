@@ -32,7 +32,7 @@ def test_process_prediction_stable_sign(smoothing_service):
     """Test stable sign detection."""
     # Process 4 identical predictions
     for i in range(4):
-        sign, should_commit = smoothing_service.process_prediction("A", 0.9)
+        sign, _should_commit = smoothing_service.process_prediction("A", 0.9)
 
     # After 4 frames of same sign, should be stable
     assert sign == "A"
@@ -42,13 +42,12 @@ def test_process_prediction_sign_change(smoothing_service):
     """Test sign change detection."""
     # First: 4 A's
     for _ in range(4):
-        sign, should_commit = smoothing_service.process_prediction("A", 0.9)
+        sign, _ = smoothing_service.process_prediction("A", 0.9)
 
     # This should emit the first A (stable)
-    first_sign = sign
 
     # Then: different sign immediately
-    sign, should_commit = smoothing_service.process_prediction("B", 0.9)
+    sign, _should_commit = smoothing_service.process_prediction("B", 0.9)
 
     # After cooldown, B should be detected
     assert sign == "A"  # Still processing A's
@@ -62,7 +61,7 @@ def test_process_prediction_cooldown(smoothing_service):
 
     # Continue with same sign - should not re-emit
     for _ in range(3):
-        sign, should_commit = smoothing_service.process_prediction("A", 0.9)
+        _sign, should_commit = smoothing_service.process_prediction("A", 0.9)
         assert should_commit is False
 
 
@@ -73,5 +72,5 @@ def test_reset(smoothing_service):
 
     smoothing_service.reset()
 
-    sign, should_commit = smoothing_service.process_prediction("B", 0.9)
+    sign, _should_commit = smoothing_service.process_prediction("B", 0.9)
     assert sign is None  # Reset cleared history

@@ -19,5 +19,6 @@ coverage
 .mypy_cache
 .nyc_output
 htmlcov
+data
 .DS_Store
 *.log

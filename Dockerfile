@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y \
     libsm6 \
     libxext6 \
     libxrender-dev \
-    libgl1-mesa-glx \
+    libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy backend
@@ -45,7 +45,6 @@ RUN pip install --no-cache-dir -e .
 
 # Copy ML artifacts
 COPY artifacts ./artifacts
-COPY data ./data
 
 # Copy frontend build from stage 1
 COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
@@ -62,4 +61,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE 8000
 
 # Run application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

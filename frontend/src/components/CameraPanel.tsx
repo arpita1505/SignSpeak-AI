@@ -1,19 +1,20 @@
-"""Camera Panel component."""
+// Camera Panel component.
 import { useEffect } from 'react'
 import { useCamera } from '../hooks/useCamera'
 import './CameraPanel.css'
 
 interface CameraPanelProps {
   onFrameCapture: (frameBase64: string) => void
-  isCapturing: boolean
+  onActiveChange: (active: boolean) => void
 }
 
-export function CameraPanel({ onFrameCapture, isCapturing }: CameraPanelProps) {
+export function CameraPanel({ onFrameCapture, onActiveChange }: CameraPanelProps) {
   const { videoRef, canvasRef, isActive, error, permission, startCamera, stopCamera, captureFrame } =
     useCamera()
 
   useEffect(() => {
-    if (isCapturing && isActive) {
+    onActiveChange(isActive)
+    if (isActive) {
       const interval = setInterval(() => {
         const frame = captureFrame()
         if (frame) {
@@ -23,7 +24,7 @@ export function CameraPanel({ onFrameCapture, isCapturing }: CameraPanelProps) {
 
       return () => clearInterval(interval)
     }
-  }, [isCapturing, isActive, captureFrame, onFrameCapture])
+  }, [isActive, captureFrame, onFrameCapture, onActiveChange])
 
   const handleStart = async () => {
     await startCamera()

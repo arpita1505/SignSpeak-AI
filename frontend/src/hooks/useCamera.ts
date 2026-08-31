@@ -1,4 +1,4 @@
-"""React hook for camera management."""
+// React hook for camera management.
 import { useEffect, useRef, useState } from 'react'
 import { cameraService } from '../utils/camera'
 

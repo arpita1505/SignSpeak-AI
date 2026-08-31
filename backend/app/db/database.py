@@ -19,7 +19,7 @@ Base = declarative_base()
 
 # Import models to register them with Base
 # This must come after Base is defined
-from app.models.translation import TranslationHistory  # noqa: E402, F401
+from app.models.translation import TranslationHistory  # noqa: F401
 
 
 def get_db():

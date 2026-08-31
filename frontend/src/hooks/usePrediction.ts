@@ -1,4 +1,4 @@
-"""React hook for WebSocket predictions."""
+// React hook for WebSocket predictions.
 import { useEffect, useState } from 'react'
 import { PredictionEvent } from '../types/api'
 import { wsService } from '../services/websocket'

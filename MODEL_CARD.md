@@ -1,5 +1,8 @@
 # Model Card — SignSpeak AI v1.0.0
 
+> Current status: **NOT TRAINED**. No verified ISL dataset or production model artifact is present.
+> All evaluation metrics are **NOT YET MEASURED**; older numeric claims are not verified results.
+
 ## Model Details
 
 ### Model Summary

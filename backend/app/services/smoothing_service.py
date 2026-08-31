@@ -1,8 +1,9 @@
 """Temporal smoothing for stable predictions."""
+from __future__ import annotations
+
 import logging
 from collections import deque
 from time import time
-from typing import Optional, Tuple
 
 from app.config import settings
 
@@ -17,6 +18,7 @@ class TemporalSmoothingService:
         stability_window: int = settings.stability_window,
         stability_min_count: int = settings.stability_min_count,
         cooldown_ms: int = settings.sign_cooldown_ms,
+        confidence_threshold: float = settings.confidence_threshold,
     ):
         """
         Initialize temporal smoothing.
@@ -29,15 +31,17 @@ class TemporalSmoothingService:
         self.stability_window = stability_window
         self.stability_min_count = stability_min_count
         self.cooldown_ms = cooldown_ms
+        self.confidence_threshold = confidence_threshold
 
         # State tracking
         self.prediction_history: deque = deque(maxlen=stability_window)
-        self.last_emitted_sign: Optional[str] = None
+        self.last_emitted_sign: str | None = None
         self.last_emit_time: float = 0.0
+        self.released_since_emit = True
 
     def process_prediction(
-        self, sign: Optional[str], confidence: float
-    ) -> Tuple[Optional[str], bool]:
+        self, sign: str | None, confidence: float
+    ) -> tuple[str | None, bool]:
         """
         Process a prediction with temporal smoothing.
 
@@ -53,7 +57,9 @@ class TemporalSmoothingService:
         current_time = time() * 1000  # Convert to milliseconds
 
         # Skip if low confidence
-        if confidence < settings.confidence_threshold:
+        if sign is None or confidence < self.confidence_threshold:
+            self.prediction_history.clear()
+            self.released_since_emit = True
             return None, False
 
         # Add to history
@@ -86,9 +92,10 @@ class TemporalSmoothingService:
             return most_common_sign, False
 
         # Check if it's different from last emitted (or cooldown expired)
-        if most_common_sign != self.last_emitted_sign:
+        if most_common_sign != self.last_emitted_sign or self.released_since_emit:
             self.last_emitted_sign = most_common_sign
             self.last_emit_time = current_time
+            self.released_since_emit = False
             return most_common_sign, True
 
         return most_common_sign, False
@@ -98,3 +105,4 @@ class TemporalSmoothingService:
         self.prediction_history.clear()
         self.last_emitted_sign = None
         self.last_emit_time = 0.0
+        self.released_since_emit = True

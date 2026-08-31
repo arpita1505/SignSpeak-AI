@@ -1,4 +1,4 @@
-"""Translation Panel component."""
+// Translation Panel component.
 import { useEffect, useState } from 'react'
 import { PredictionEvent } from '../types/api'
 import { speechService } from '../utils/speech'

@@ -3,18 +3,20 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
 # Create test database engine BEFORE importing app modules
 TEST_DATABASE_URL = "sqlite:///:memory:"
 test_engine = create_engine(
     TEST_DATABASE_URL,
     connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
 # Patch app.db.database BEFORE importing app modules
-import sys
 import app.db.database as db_module
+
 original_sessionlocal = db_module.SessionLocal
 db_module.SessionLocal = TestingSessionLocal
 

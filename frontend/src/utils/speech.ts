@@ -1,4 +1,4 @@
-"""Speech synthesis utilities."""
+// Speech synthesis utilities.
 
 export class SpeechService {
   private synth: SpeechSynthesis

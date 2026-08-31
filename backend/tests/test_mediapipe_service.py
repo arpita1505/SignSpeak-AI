@@ -8,7 +8,7 @@ from app.services.mediapipe_service import MediaPipeService
 @pytest.fixture
 def mediapipe_service():
     """Create MediaPipe service instance."""
-    return MediaPipeService()
+    return MediaPipeService(initialize_detector=False)
 
 
 def test_normalize_landmarks_dimensions(mediapipe_service):
@@ -25,14 +25,12 @@ def test_normalize_landmarks_translation_invariance(mediapipe_service):
     landmarks1[:3] = [0.5, 0.5, 0]  # Set wrist position
 
     # Create second hand (same shape, different position)
-    landmarks2 = landmarks1 + np.array([0.1, 0.1, 0] + [0] * 60)
-    landmarks2[0:3] = [0.6, 0.6, 0]  # New wrist position
+    landmarks2 = landmarks1 + np.tile([0.1, 0.1, 0.0], 21)
 
     normalized1 = mediapipe_service.normalize_landmarks(landmarks1)
     normalized2 = mediapipe_service.normalize_landmarks(landmarks2)
 
-    # Should be very similar (allowing for floating point differences)
-    # After normalization, translation doesn't matter much
+    assert np.allclose(normalized1, normalized2)
 
 
 def test_pad_landmarks_for_two_hands_single_hand(mediapipe_service):
@@ -43,8 +41,7 @@ def test_pad_landmarks_for_two_hands_single_hand(mediapipe_service):
     features = mediapipe_service.pad_landmarks_for_two_hands(landmarks, handedness)
 
     assert features.shape == (126,)
-    # First 63 should be the hand, second 63 should be zeros
-    assert np.allclose(features[63:], 0)
+    assert np.allclose(features[:63], 0)
 
 
 def test_pad_landmarks_for_two_hands_two_hands(mediapipe_service):

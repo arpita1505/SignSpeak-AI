@@ -1,17 +1,16 @@
-"""Main App component."""
+// Main App component.
 import { useEffect, useState } from 'react'
 import { Header } from './components/Header'
 import { CameraPanel } from './components/CameraPanel'
 import { PredictionCard } from './components/PredictionCard'
 import { TranslationPanel } from './components/TranslationPanel'
 import { StatusBadge } from './components/StatusBadge'
-import { useCamera } from './hooks/useCamera'
 import { usePrediction } from './hooks/usePrediction'
 import { getHealth } from './services/api'
 import './App.css'
 
 function App() {
-  const { isActive } = useCamera()
+  const [isActive, setIsActive] = useState(false)
   const { prediction, wsStatus, sendFrame, connect, disconnect } = usePrediction()
   const [modelLoaded, setModelLoaded] = useState(false)
 
@@ -54,7 +53,7 @@ function App() {
 
           <div className="layout">
             <div className="panel-left">
-              <CameraPanel onFrameCapture={handleFrameCapture} isCapturing={isActive} />
+              <CameraPanel onFrameCapture={handleFrameCapture} onActiveChange={setIsActive} />
             </div>
 
             <div className="panel-right">

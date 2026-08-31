@@ -1,4 +1,6 @@
 """Translation history endpoints."""
+from __future__ import annotations
+
 import logging
 from typing import Optional
 
@@ -40,7 +42,7 @@ async def create_history(
 @router.get("/{history_id}", response_model=Optional[TranslationResponse])
 async def get_history_by_id(
     history_id: int, db: Session = Depends(get_db)
-) -> Optional[TranslationResponse]:
+) -> TranslationResponse | None:
     """Get a specific translation history entry."""
     try:
         history = HistoryService.get_history_by_id(db, history_id)

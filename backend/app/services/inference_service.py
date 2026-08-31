@@ -1,10 +1,11 @@
 """Inference pipeline orchestration."""
+from __future__ import annotations
+
 import base64
-import cv2
 import logging
+
+import cv2
 import numpy as np
-from io import BytesIO
-from typing import Optional, Tuple
 
 from app.services.mediapipe_service import MediaPipeService
 from app.services.model_service import ModelService
@@ -22,7 +23,7 @@ class InferenceService:
         self.model_service = ModelService()
         self.smoothing = TemporalSmoothingService()
 
-    def decode_frame(self, frame_base64: str) -> Optional[np.ndarray]:
+    def decode_frame(self, frame_base64: str) -> np.ndarray | None:
         """
         Decode base64 JPEG frame.
 
@@ -42,7 +43,7 @@ class InferenceService:
             logger.error(f"Error decoding frame: {e}")
             return None
 
-    def process_frame(self, frame: np.ndarray) -> Tuple[dict, Optional[str], float]:
+    def process_frame(self, frame: np.ndarray) -> tuple[dict, str | None, float]:
         """
         Process a single frame through the full pipeline.
 
@@ -96,7 +97,7 @@ class InferenceService:
 
     def process_frame_from_base64(
         self, frame_base64: str
-    ) -> Tuple[dict, Optional[str], float]:
+    ) -> tuple[dict, str | None, float]:
         """
         Process a base64-encoded frame.
 

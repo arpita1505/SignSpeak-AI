@@ -1,4 +1,8 @@
-# SignSpeak AI - BUILD COMPLETE ✅
+# SignSpeak AI - Historical Build Report (Unverified)
+
+> Audit correction (2026-08-31): no trained model artifact or verified ISL dataset is present.
+> This older report contains unsupported completion claims. Use `FINAL_VERIFICATION.md` for the
+> authoritative verified status.
 
 ## Project Overview
 

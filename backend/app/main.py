@@ -2,16 +2,14 @@
 import logging
 import os
 from contextlib import asynccontextmanager
-from typing import Optional
 
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.engine import Engine
+from fastapi.staticfiles import StaticFiles
 
 from app.api import health, history, websocket
 from app.config import settings
-from app.db.database import init_db, engine as default_engine
+from app.db.database import init_db
 
 # Setup logging
 logging.basicConfig(

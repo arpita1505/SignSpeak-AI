@@ -1,7 +1,7 @@
 """WebSocket prediction endpoint."""
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
@@ -11,14 +11,11 @@ from app.services.inference_service import InferenceService
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["websocket"])
 
-# Global inference service
-inference_service = InferenceService()
-
-
 @router.websocket("/ws/predict")
 async def websocket_predict(websocket: WebSocket):
     """WebSocket endpoint for real-time predictions."""
     await websocket.accept()
+    inference_service = InferenceService()
     logger.info("WebSocket client connected")
 
     try:
@@ -55,14 +52,12 @@ async def websocket_predict(websocket: WebSocket):
 
             # Process frame
             try:
-                prediction_dict, stable_sign, confidence = (
-                    inference_service.process_frame_from_base64(frame_base64)
-                )
+                prediction_dict, _, _ = inference_service.process_frame_from_base64(frame_base64)
 
                 # Prepare response
                 if prediction_dict["hands_detected"] == 0:
                     response = PredictionResponse(type="no_hand")
-                elif prediction_dict["confidence"] < 0.75:
+                elif prediction_dict["confidence"] < inference_service.smoothing.confidence_threshold:
                     response = PredictionResponse(
                         type="low_confidence",
                         confidence=prediction_dict["confidence"],
@@ -75,7 +70,7 @@ async def websocket_predict(websocket: WebSocket):
                         stable=prediction_dict["stable"],
                         commit=prediction_dict["commit"],
                         hands_detected=prediction_dict["hands_detected"],
-                        timestamp=datetime.utcnow().isoformat(),
+                        timestamp=datetime.now(timezone.utc).isoformat(),
                     )
 
                 await websocket.send_text(response.model_dump_json())

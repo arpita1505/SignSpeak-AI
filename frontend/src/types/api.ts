@@ -1,4 +1,4 @@
-"""TypeScript types for the application."""
+// TypeScript types for the application.
 
 export interface HealthResponse {
   status: string
@@ -16,7 +16,7 @@ export interface ModelInfo {
 }
 
 export interface PredictionEvent {
-  type: 'prediction' | 'no_hand' | 'low_confidence' | 'error'
+  type: 'prediction' | 'no_hand' | 'low_confidence' | 'model_unavailable' | 'error'
   sign?: string
   confidence?: number
   stable?: boolean

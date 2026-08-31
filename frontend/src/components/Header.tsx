@@ -1,4 +1,4 @@
-"""Main Header component."""
+// Main Header component.
 import './Header.css'
 
 export function Header() {

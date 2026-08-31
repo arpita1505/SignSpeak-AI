@@ -15,14 +15,16 @@ os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 # Now import app after env is set
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+
 from app.db.database import Base, get_db
 from app.main import create_app
-
 
 # Create test database
 engine = create_engine(
     "sqlite:///:memory:",
     connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -42,7 +44,7 @@ def override_get_db():
 @pytest.fixture
 def client():
     """Create test client with overridden database."""
-    app = create_app()
+    app = create_app(test_mode=True)
     # Override the get_db dependency
     app.dependency_overrides[get_db] = override_get_db
     
@@ -61,6 +63,4 @@ def smoothing_service():
         stability_min_count=4,
         cooldown_ms=800,
     )
-
-
 

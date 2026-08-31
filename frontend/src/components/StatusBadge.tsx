@@ -1,4 +1,4 @@
-"""Status Badge component."""
+// Status Badge component.
 import { useEffect, useState } from 'react'
 import { getHealth } from '../services/api'
 import './StatusBadge.css'

@@ -1,6 +1,7 @@
 """MediaPipe hand landmark detection service."""
+from __future__ import annotations
+
 import logging
-from typing import Optional, Tuple
 
 import cv2
 import mediapipe as mp
@@ -12,20 +13,20 @@ logger = logging.getLogger(__name__)
 class MediaPipeService:
     """Service for hand landmark detection using MediaPipe."""
 
-    def __init__(self):
+    def __init__(self, initialize_detector: bool = True):
         """Initialize MediaPipe hand detector."""
         self.hands = mp.solutions.hands.Hands(
             static_image_mode=False,
             max_num_hands=2,
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5,
-        )
+        ) if initialize_detector else None
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_hands = mp.solutions.hands
 
     def detect_landmarks(
         self, frame: np.ndarray
-    ) -> Tuple[Optional[list], Optional[list], Optional[list]]:
+    ) -> tuple[list | None, list | None, list | None]:
         """
         Detect hand landmarks from a frame.
 
@@ -41,6 +42,8 @@ class MediaPipeService:
         try:
             # Convert BGR to RGB
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            if self.hands is None:
+                raise RuntimeError("MediaPipe detector is not initialized")
             results = self.hands.process(rgb_frame)
 
             landmarks_list = []
@@ -71,7 +74,7 @@ class MediaPipeService:
             return None, None, None
 
     def draw_landmarks(
-        self, frame: np.ndarray, landmarks_list: Optional[list]
+        self, frame: np.ndarray, landmarks_list: list | None
     ) -> np.ndarray:
         """
         Draw landmarks on frame.
@@ -89,7 +92,6 @@ class MediaPipeService:
         try:
             for landmarks in landmarks_list:
                 # Reshape landmarks to MediaPipe format
-                hand_landmarks = self.mp_hands.HandLandmark
                 reshaped = []
                 for i in range(0, len(landmarks), 3):
                     x, y, z = landmarks[i : i + 3]
@@ -148,7 +150,7 @@ class MediaPipeService:
             return landmarks
 
     def pad_landmarks_for_two_hands(
-        self, landmarks_list: Optional[list], handedness_list: Optional[list]
+        self, landmarks_list: list | None, handedness_list: list | None
     ) -> np.ndarray:
         """
         Pad landmarks to support exactly 2 hands.
@@ -168,6 +170,8 @@ class MediaPipeService:
 
         # Determine hand order (Left first, Right second)
         hands = {}
+        if handedness_list is None or len(handedness_list) != len(landmarks_list):
+            return feature_vector
         for landmarks, handedness in zip(landmarks_list, handedness_list):
             hands[handedness] = self.normalize_landmarks(landmarks)
 

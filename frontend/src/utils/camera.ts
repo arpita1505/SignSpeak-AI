@@ -1,4 +1,4 @@
-"""Camera utilities for webcam access and frame capture."""
+// Camera utilities for webcam access and frame capture.
 
 export class CameraService {
   private stream: MediaStream | null = null

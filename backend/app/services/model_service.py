@@ -1,8 +1,9 @@
 """Model loading and inference service."""
+from __future__ import annotations
+
 import json
 import logging
 from pathlib import Path
-from typing import Optional, Tuple
 
 import numpy as np
 from joblib import load
@@ -56,7 +57,7 @@ class ModelService:
             logger.error(f"Error loading model: {e}")
             return False
 
-    def predict(self, features: np.ndarray) -> Tuple[Optional[str], float]:
+    def predict(self, features: np.ndarray) -> tuple[str | None, float]:
         """
         Make a prediction.
 
@@ -93,7 +94,7 @@ class ModelService:
         """Check if model is loaded."""
         return self.model is not None
 
-    def get_model_version(self) -> Optional[str]:
+    def get_model_version(self) -> str | None:
         """Get model version."""
         if self.metadata:
             return self.metadata.get("version")

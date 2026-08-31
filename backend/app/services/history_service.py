@@ -1,5 +1,8 @@
 """Service for managing translation history."""
+from __future__ import annotations
+
 import logging
+
 from sqlalchemy.orm import Session
 
 from app.models.translation import TranslationHistory
@@ -13,7 +16,7 @@ class HistoryService:
 
     @staticmethod
     def create_history(
-        db: Session, translation: TranslationCreate, session_id: str = None
+        db: Session, translation: TranslationCreate, session_id: str | None = None
     ) -> TranslationResponse:
         """
         Create a new translation history entry.

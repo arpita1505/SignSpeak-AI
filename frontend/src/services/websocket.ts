@@ -1,4 +1,4 @@
-"""WebSocket service for real-time predictions."""
+// WebSocket service for real-time predictions.
 import { PredictionEvent } from '../types/api'
 
 export class WebSocketService {
@@ -10,6 +10,9 @@ export class WebSocketService {
   private maxReconnectAttempts = 10
   private reconnectDelay = 1000
   private state: 'connecting' | 'connected' | 'disconnected' = 'disconnected'
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null
+  private intentionalClose = false
+  private framePending = false
 
   constructor() {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
@@ -18,6 +21,8 @@ export class WebSocketService {
   }
 
   connect(): Promise<void> {
+    if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) return Promise.resolve()
+    this.intentionalClose = false
     return new Promise((resolve, reject) => {
       try {
         this.state = 'connecting'
@@ -33,6 +38,7 @@ export class WebSocketService {
         }
 
         this.ws.onmessage = (event) => {
+          this.framePending = false
           try {
             const message: PredictionEvent = JSON.parse(event.data)
             this.notifyMessage(message)
@@ -49,7 +55,9 @@ export class WebSocketService {
         this.ws.onclose = () => {
           this.state = 'disconnected'
           this.notifyStateChange('disconnected')
-          this.attemptReconnect()
+          this.ws = null
+          this.framePending = false
+          if (!this.intentionalClose) this.attemptReconnect()
         }
       } catch (e) {
         this.state = 'disconnected'
@@ -60,6 +68,9 @@ export class WebSocketService {
   }
 
   disconnect(): void {
+    this.intentionalClose = true
+    if (this.reconnectTimer) clearTimeout(this.reconnectTimer)
+    this.reconnectTimer = null
     if (this.ws) {
       this.ws.close()
       this.ws = null
@@ -69,10 +80,11 @@ export class WebSocketService {
   }
 
   sendFrame(frameBase64: string): void {
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN && !this.framePending) {
       try {
         const message = JSON.stringify({ frame: frameBase64 })
         this.ws.send(message)
+        this.framePending = true
       } catch (e) {
         console.error('Failed to send frame:', e)
       }
@@ -119,7 +131,7 @@ export class WebSocketService {
     const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000)
     console.log(`Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`)
 
-    setTimeout(() => {
+    this.reconnectTimer = setTimeout(() => {
       this.connect().catch((e) => {
         console.error('Reconnection failed:', e)
       })

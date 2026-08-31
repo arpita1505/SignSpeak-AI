@@ -1,7 +1,7 @@
-"""Tests for Header component."""
+// Tests for Header component.
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { Header } from '../Header'
+import { Header } from './Header'
 
 describe('Header', () => {
   it('renders title', () => {

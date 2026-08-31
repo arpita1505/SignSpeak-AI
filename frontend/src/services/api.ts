@@ -1,4 +1,4 @@
-"""API service for health and model information."""
+// API service for health and model information.
 import { HealthResponse, ModelInfo } from '../types/api'
 
 const API_URL = import.meta.env.VITE_API_URL || window.location.origin

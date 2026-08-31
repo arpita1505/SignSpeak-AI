@@ -1,6 +1,7 @@
 """Pydantic schemas for API requests/responses."""
+from __future__ import annotations
+
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -10,7 +11,7 @@ class HealthResponse(BaseModel):
 
     status: str
     model_loaded: bool
-    model_version: Optional[str]
+    model_version: str | None
     database: str
 
 
@@ -35,20 +36,20 @@ class PredictionResponse(BaseModel):
     """Prediction response from WebSocket."""
 
     type: str  # "prediction", "no_hand", "low_confidence", "error"
-    sign: Optional[str] = None
-    confidence: Optional[float] = None
-    stable: Optional[bool] = None
-    commit: Optional[bool] = None
-    hands_detected: Optional[int] = None
-    timestamp: Optional[str] = None
-    message: Optional[str] = None
+    sign: str | None = None
+    confidence: float | None = None
+    stable: bool | None = None
+    commit: bool | None = None
+    hands_detected: int | None = None
+    timestamp: str | None = None
+    message: str | None = None
 
 
 class TranslationCreate(BaseModel):
     """Create translation history entry."""
 
     text: str
-    model_version: Optional[str] = None
+    model_version: str | None = None
 
 
 class TranslationResponse(BaseModel):
@@ -59,7 +60,7 @@ class TranslationResponse(BaseModel):
     id: int
     text: str
     created_at: datetime
-    model_version: Optional[str]
+    model_version: str | None
 
 
 class LabelsResponse(BaseModel):
