@@ -1,11 +1,19 @@
 # Project Verification & Build Status
 
 **Build Date:** 2026-09-01
-**Status:** ✅ Trained and verified locally; ready for authenticated deployment
+**Status:** ✅ Released and production-deployed
+
+- GitHub: [arpita1505/SignSpeak-AI](https://github.com/arpita1505/SignSpeak-AI)
+- Production: [signspeak-ai-3l17.onrender.com](https://signspeak-ai-3l17.onrender.com)
+- CI: PASS on `main`
+- Render: LIVE, Docker, Singapore, free instance
+- Production health: PASS — model `1.0.0-realsign` loaded
+- Production WebSocket: PASS over WSS
 
 Current measured release: 22,369 processed RealSign samples across A–Z, SVC held-out accuracy
 0.9055 and macro F1 0.8968, 19 backend tests, 7 frontend unit tests, and 2 Playwright E2E tests.
-See `FINAL_VERIFICATION.md` for the authoritative checklist and limitations.
+See `FINAL_VERIFICATION.md` for the authoritative checklist and limitations. Free Render instances
+spin down after inactivity and can have a cold-start delay.
 
 ## File Inventory
 

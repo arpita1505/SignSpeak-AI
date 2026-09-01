@@ -6,7 +6,22 @@ SignSpeak AI is designed as a single containerized service suitable for deployme
 
 The production image includes the verified model artifact and built frontend. Do not mount raw
 training images into the runtime container. Remote camera access requires HTTPS. A public deployment
-is not claimed until the service has been created and verified in the owner's authenticated account.
+is live at [https://signspeak-ai-3l17.onrender.com](https://signspeak-ai-3l17.onrender.com).
+
+## Verified production deployment
+
+- Platform: Render Docker Web Service
+- Repository: [arpita1505/SignSpeak-AI](https://github.com/arpita1505/SignSpeak-AI)
+- Branch: `main`
+- Region/plan: Singapore/free
+- Health check: `/api/health`
+- Required explicit environment variable: `APP_ENV=production`
+- Runtime port: Render supplies `PORT`; the Docker command binds `0.0.0.0` to that value
+- Frontend/API/WebSocket: one same-origin HTTPS service (`/`, `/api/*`, `/ws/*`)
+- Model: `/app/artifacts/signspeak_model.joblib`, copied into the image at build time
+
+The free instance may spin down during inactivity. SQLite history is ephemeral on this plan; use a
+managed PostgreSQL `DATABASE_URL` if durable history becomes a product requirement.
 
 ## Prerequisites
 
@@ -90,21 +105,13 @@ git push -u origin main
 
 ```env
 APP_ENV=production
-HOST=0.0.0.0
-PORT=8000
-DATABASE_URL=sqlite:///./signspeak.db
-MODEL_PATH=/app/artifacts/signspeak_model.joblib
-MODEL_METADATA_PATH=/app/artifacts/model_metadata.json
-CONFIDENCE_THRESHOLD=0.75
-STABILITY_WINDOW=5
-STABILITY_MIN_COUNT=4
-SIGN_COOLDOWN_MS=800
-LOG_LEVEL=INFO
 ```
 
-**Instance:**
-- Type: Standard
-- Size: Medium (sufficient for inference-only workload)
+All other values have production-safe defaults in the application/Dockerfile. Render injects
+`PORT`; do not hard-code it. Optional overrides include `DATABASE_URL`, `CONFIDENCE_THRESHOLD`, and
+the smoothing settings.
+
+**Instance:** Free (verified; cold starts and ephemeral filesystem apply)
 
 **Health Check:**
 - Health Check Path: `/api/health`
@@ -121,11 +128,11 @@ LOG_LEVEL=INFO
 Once deployment completes:
 
 ```bash
-# Get your Render URL (e.g., signspeak-ai.onrender.com)
-curl https://signspeak-ai.onrender.com/api/health
+# Verify the production service
+curl https://signspeak-ai-3l17.onrender.com/api/health
 
 # Should return:
-# {"status":"ok","model_loaded":true,"model_version":"1.0.0","database":"ok"}
+# {"status":"ok","model_loaded":true,"model_version":"1.0.0-realsign","database":"ok"}
 ```
 
 ## Production Configuration
@@ -177,7 +184,7 @@ alembic upgrade head
 Render provides free SSL certificates automatically.
 
 **Configuration:**
-- Render auto-generates: `https://your-service.onrender.com`
+- Current Render URL: `https://signspeak-ai-3l17.onrender.com`
 - Certificate renewal: Automatic
 - HSTS: Already enabled by default
 

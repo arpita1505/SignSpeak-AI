@@ -35,8 +35,8 @@ docker compose up --build
 
 ```bash
 # Clone
-git clone https://github.com/yourusername/signspeak-ai.git
-cd signspeak-ai
+git clone https://github.com/arpita1505/SignSpeak-AI.git
+cd SignSpeak-AI
 
 # Backend setup
 cd backend

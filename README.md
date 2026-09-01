@@ -2,6 +2,10 @@
 
 Real-Time Indian Sign Language to Text and Speech Translator Using Computer Vision
 
+**Live application:** [https://signspeak-ai-3l17.onrender.com](https://signspeak-ai-3l17.onrender.com)
+
+**Source:** [github.com/arpita1505/SignSpeak-AI](https://github.com/arpita1505/SignSpeak-AI)
+
 > **Verified release (2026-09-01):** the repository includes a real A–Z model trained on the
 > CC0-licensed [RealSign Indian Sign Language Dataset](https://github.com/RealSign62/RealSign-Indian-Sign-Language-Dataset).
 > After global exact deduplication and MediaPipe filtering, the splits contain 16,138 train, 2,179
@@ -13,6 +17,7 @@ Real-Time Indian Sign Language to Text and Speech Translator Using Computer Visi
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Python](https://img.shields.io/badge/python-3.9+-blue)
 ![TypeScript](https://img.shields.io/badge/typescript-5.0+-blue)
+[![CI/CD Pipeline](https://github.com/arpita1505/SignSpeak-AI/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/arpita1505/SignSpeak-AI/actions/workflows/ci.yml)
 
 ## Overview
 
@@ -47,9 +52,10 @@ The system uses:
 
 ### Installation
 
-1. Enter your checked-out repository:
+1. Clone the repository:
 ```bash
-cd /path/to/CGMS
+git clone https://github.com/arpita1505/SignSpeak-AI.git
+cd SignSpeak-AI
 ```
 
 2. Backend setup:
@@ -133,6 +139,12 @@ docker compose up --build
 ```
 
 Access: http://localhost:8000
+
+Production: [https://signspeak-ai-3l17.onrender.com](https://signspeak-ai-3l17.onrender.com)
+
+The Render free instance can spin down when idle, so the first request after inactivity may take
+about a minute. The production frontend uses same-origin HTTPS REST requests and WSS predictions;
+no localhost production endpoint is configured.
 
 ## Usage
 

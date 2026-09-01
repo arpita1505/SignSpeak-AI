@@ -1,6 +1,6 @@
 # Final Verification
 
-Verified on 2026-09-01 in the local macOS and Docker environments.
+Verified on 2026-09-01 locally, in Docker, in GitHub Actions, and on Render production.
 
 ## Status
 
@@ -32,10 +32,17 @@ startup. Frames are size-bounded and validated; missing models fail closed witho
 - Container health smoke: PASS
 - WebSocket validation/error path: PASS
 - Playwright E2E: PASS — 2 passed, 0 failed
+- GitHub repository: PASS — https://github.com/arpita1505/SignSpeak-AI
+- GitHub Actions: PASS on `main`
+- Render HTTPS root and frontend asset: PASS
+- Render `/api/health`: PASS — `model_loaded=true`, version `1.0.0-realsign`
+- Render `/api/model/info`: PASS — real SVC metrics and A–Z model
+- Render WebSocket: PASS — `wss://signspeak-ai-3l17.onrender.com/ws/predict`
+- Live URL: https://signspeak-ai-3l17.onrender.com
 
 ## Remaining user actions
 
-Perform an external signer-disjoint evaluation and a real-camera HTTPS usability test, then deploy
-through the owner's authenticated hosting account. The publisher does not expose per-image signer
-IDs: global exact deduplication was completed, but near-duplicate or signer overlap may remain and
-the held-out metrics can overstate new-user generalization. No public URL is claimed yet.
+Perform an external signer-disjoint evaluation and an end-user camera usability study. The publisher
+does not expose per-image signer IDs: global exact deduplication was completed, but near-duplicate
+or signer overlap may remain and the held-out metrics can overstate new-user generalization. The
+Render free instance has cold starts and ephemeral SQLite history; neither affects model integrity.
