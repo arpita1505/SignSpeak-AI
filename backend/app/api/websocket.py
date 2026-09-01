@@ -1,21 +1,25 @@
 """WebSocket prediction endpoint."""
+
 import json
 import logging
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
+from app.api.health import model_service
+from app.config import settings
 from app.schemas.prediction import PredictionResponse
 from app.services.inference_service import InferenceService
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["websocket"])
 
+
 @router.websocket("/ws/predict")
 async def websocket_predict(websocket: WebSocket):
     """WebSocket endpoint for real-time predictions."""
     await websocket.accept()
-    inference_service = InferenceService()
+    inference_service = None
     logger.info("WebSocket client connected")
 
     try:
@@ -23,19 +27,22 @@ async def websocket_predict(websocket: WebSocket):
             # Receive message
             try:
                 data = await websocket.receive_text()
+                if len(data.encode("utf-8")) > settings.max_websocket_message_bytes:
+                    await websocket.send_text(
+                        PredictionResponse(
+                            type="error", message="Frame payload too large"
+                        ).model_dump_json()
+                    )
+                    continue
                 message = json.loads(data)
             except json.JSONDecodeError:
-                response = PredictionResponse(
-                    type="error", message="Invalid JSON format"
-                )
+                response = PredictionResponse(type="error", message="Invalid JSON format")
                 await websocket.send_text(response.model_dump_json())
                 continue
 
             # Validate message
-            if "frame" not in message:
-                response = PredictionResponse(
-                    type="error", message="Missing 'frame' field"
-                )
+            if not isinstance(message, dict) or not isinstance(message.get("frame"), str):
+                response = PredictionResponse(type="error", message="Missing 'frame' field")
                 await websocket.send_text(response.model_dump_json())
                 continue
 
@@ -43,12 +50,13 @@ async def websocket_predict(websocket: WebSocket):
             frame_base64 = message["frame"]
 
             # Check if model is loaded
-            if not inference_service.model_service.is_model_loaded():
-                response = PredictionResponse(
-                    type="error", message="Model not loaded"
-                )
+            if not model_service.is_model_loaded():
+                response = PredictionResponse(type="model_unavailable", message="Model not loaded")
                 await websocket.send_text(response.model_dump_json())
                 continue
+
+            if inference_service is None:
+                inference_service = InferenceService(model_service=model_service)
 
             # Process frame
             try:
@@ -57,7 +65,9 @@ async def websocket_predict(websocket: WebSocket):
                 # Prepare response
                 if prediction_dict["hands_detected"] == 0:
                     response = PredictionResponse(type="no_hand")
-                elif prediction_dict["confidence"] < inference_service.smoothing.confidence_threshold:
+                elif (
+                    prediction_dict["confidence"] < inference_service.smoothing.confidence_threshold
+                ):
                     response = PredictionResponse(
                         type="low_confidence",
                         confidence=prediction_dict["confidence"],
@@ -77,9 +87,7 @@ async def websocket_predict(websocket: WebSocket):
 
             except Exception as e:
                 logger.error(f"Error processing frame: {e}")
-                response = PredictionResponse(
-                    type="error", message="Failed to process frame"
-                )
+                response = PredictionResponse(type="error", message="Failed to process frame")
                 await websocket.send_text(response.model_dump_json())
 
     except WebSocketDisconnect:

@@ -1,4 +1,5 @@
 """Tests for API endpoints."""
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -44,17 +45,13 @@ def client():
     app = create_app(test_mode=True)
     # Override database dependency
     app.dependency_overrides[get_db] = override_get_db
-    
+
     yield TestClient(app)
-    
+
     # Cleanup
     app.dependency_overrides.clear()
     # Restore original SessionLocal
     db_module.SessionLocal = original_sessionlocal
-
-
-
-
 
 
 def test_health_endpoint(client):
@@ -119,3 +116,35 @@ def test_history_delete_all(client):
     response = client.get("/api/history")
     assert response.status_code == 200
     assert len(response.json()) == 0
+
+
+def test_websocket_rejects_malformed_json(client):
+    """Malformed messages return a safe protocol error without a traceback."""
+    with client.websocket_connect("/ws/predict") as socket:
+        socket.send_text("not-json")
+        assert socket.receive_json() == {
+            "type": "error",
+            "sign": None,
+            "confidence": None,
+            "stable": None,
+            "commit": None,
+            "hands_detected": None,
+            "timestamp": None,
+            "message": "Invalid JSON format",
+        }
+
+
+def test_websocket_reports_model_unavailable(client):
+    """A missing production artifact is explicit and does not initialize MediaPipe."""
+    from app.api.health import model_service
+
+    original = model_service.model
+    model_service.model = None
+    try:
+        with client.websocket_connect("/ws/predict") as socket:
+            socket.send_json({"frame": "ZmFrZQ=="})
+            message = socket.receive_json()
+            assert message["type"] == "model_unavailable"
+            assert message["message"] == "Model not loaded"
+    finally:
+        model_service.model = original

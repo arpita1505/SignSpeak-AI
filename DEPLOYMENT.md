@@ -4,6 +4,10 @@
 
 SignSpeak AI is designed as a single containerized service suitable for deployment on any Docker-compatible hosting platform.
 
+The production image includes the verified model artifact and built frontend. Do not mount raw
+training images into the runtime container. Remote camera access requires HTTPS. A public deployment
+is not claimed until the service has been created and verified in the owner's authenticated account.
+
 ## Prerequisites
 
 - Docker and Docker Compose
@@ -246,8 +250,8 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/signspeak-ai.git
-cd signspeak-ai
+git clone <your-repository-url> CGMS
+cd CGMS
 
 # Create production env file
 cp .env.example .env.prod

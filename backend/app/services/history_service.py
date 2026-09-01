@@ -1,4 +1,5 @@
 """Service for managing translation history."""
+
 from __future__ import annotations
 
 import logging
@@ -57,9 +58,12 @@ class HistoryService:
             List of translation records
         """
         try:
-            return db.query(TranslationHistory).order_by(
-                TranslationHistory.created_at.desc()
-            ).limit(limit).all()
+            return (
+                db.query(TranslationHistory)
+                .order_by(TranslationHistory.created_at.desc())
+                .limit(limit)
+                .all()
+            )
         except Exception as e:
             logger.error(f"Error fetching translation history: {e}")
             return []
@@ -77,9 +81,7 @@ class HistoryService:
             Translation record or None
         """
         try:
-            return db.query(TranslationHistory).filter(
-                TranslationHistory.id == history_id
-            ).first()
+            return db.query(TranslationHistory).filter(TranslationHistory.id == history_id).first()
         except Exception as e:
             logger.error(f"Error fetching translation: {e}")
             return None
@@ -97,9 +99,7 @@ class HistoryService:
             True if successful
         """
         try:
-            db.query(TranslationHistory).filter(
-                TranslationHistory.id == history_id
-            ).delete()
+            db.query(TranslationHistory).filter(TranslationHistory.id == history_id).delete()
             db.commit()
             return True
         except Exception as e:

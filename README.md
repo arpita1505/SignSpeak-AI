@@ -2,6 +2,14 @@
 
 Real-Time Indian Sign Language to Text and Speech Translator Using Computer Vision
 
+> **Verified release (2026-09-01):** the repository includes a real A–Z model trained on the
+> CC0-licensed [RealSign Indian Sign Language Dataset](https://github.com/RealSign62/RealSign-Indian-Sign-Language-Dataset).
+> After global exact deduplication and MediaPipe filtering, the splits contain 16,138 train, 2,179
+> validation, and 4,052 held-out test feature vectors. The selected RBF SVC achieved **0.9055 test
+> accuracy** and **0.8968 macro F1**. This product recognizes isolated static fingerspelling; it is
+> not continuous ISL translation. See `DATASET_CARD.md`, `MODEL_CARD.md`, and
+> `FINAL_VERIFICATION.md` for provenance, limitations, and measured verification.
+
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Python](https://img.shields.io/badge/python-3.9+-blue)
 ![TypeScript](https://img.shields.io/badge/typescript-5.0+-blue)
@@ -39,10 +47,9 @@ The system uses:
 
 ### Installation
 
-1. Clone repository:
+1. Enter your checked-out repository:
 ```bash
-git clone https://github.com/yourusername/signspeak-ai.git
-cd signspeak-ai
+cd /path/to/CGMS
 ```
 
 2. Backend setup:
@@ -86,12 +93,18 @@ python ml/train.py
 python ml/evaluate.py
 ```
 
-#### Option B: Use test model
+#### Option B: Reproduce the RealSign model
 
-A minimal test model can be auto-generated for development:
+Place the publisher's extracted Training, Validation, and Testing directories under
+`data/raw/realsign/`, then run:
+
 ```bash
-python ml/train.py --test  # Creates a model with subset data
+python ml/extract_realsign.py
+python ml/train_realsign.py
+python ml/sample_inference.py
 ```
+
+The repository already contains the verified deployable artifact; do not retrain merely to run it.
 
 ### Running Development Server
 
@@ -251,12 +264,12 @@ Response:
 ```json
 {
   "version": "1.0.0",
-  "algorithm": "Random Forest",
+  "algorithm": "SVC",
   "feature_dimension": 126,
   "supported_labels": ["A", "B", "C", ...],
   "metrics": {
-    "accuracy": 0.95,
-    "f1": 0.94
+    "accuracy": 0.9054787759131293,
+    "macro_f1": 0.8967902795968558
   }
 }
 ```

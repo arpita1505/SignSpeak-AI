@@ -31,6 +31,8 @@ htmlcov/
 
 # Node
 node_modules/
+frontend/test-results/
+frontend/playwright-report/
 yarn.lock
 dist/
 build/
@@ -40,6 +42,7 @@ build/
 data/raw/
 data/processed/
 *.joblib
+!artifacts/signspeak_model.joblib
 *.pkl
 *.model
 

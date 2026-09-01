@@ -1,4 +1,5 @@
 """Pytest configuration."""
+
 import os
 import sys
 
@@ -47,9 +48,9 @@ def client():
     app = create_app(test_mode=True)
     # Override the get_db dependency
     app.dependency_overrides[get_db] = override_get_db
-    
+
     yield TestClient(app)
-    
+
     # Clear overrides
     app.dependency_overrides.clear()
 
@@ -58,9 +59,9 @@ def client():
 def smoothing_service():
     """Create smoothing service for testing."""
     from app.services.smoothing_service import TemporalSmoothingService
+
     return TemporalSmoothingService(
         stability_window=5,
         stability_min_count=4,
         cooldown_ms=800,
     )
-

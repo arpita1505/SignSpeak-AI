@@ -1,7 +1,8 @@
 """FastAPI application factory."""
+
 import logging
-import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -33,6 +34,7 @@ async def lifespan(app: FastAPI):
 
     # Load model
     from app.api.health import model_service
+
     if model_service.is_model_loaded():
         logger.info(f"Model loaded: version {model_service.get_model_version()}")
     else:
@@ -52,7 +54,7 @@ def create_app(test_mode: bool = False) -> FastAPI:
         version="1.0.0",
         lifespan=lifespan,
     )
-    
+
     # Mark test mode
     if test_mode:
         app.test_mode = True
@@ -60,8 +62,8 @@ def create_app(test_mode: bool = False) -> FastAPI:
     # CORS middleware
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
+        allow_origins=settings.allowed_origins,
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],
     )
@@ -72,12 +74,15 @@ def create_app(test_mode: bool = False) -> FastAPI:
     app.include_router(websocket.router)
 
     # Serve static files (frontend)
-    dist_path = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")
-    if os.path.exists(dist_path):
+    dist_candidates = [
+        Path(__file__).resolve().parents[1] / "frontend" / "dist",  # container
+        Path(__file__).resolve().parents[2] / "frontend" / "dist",  # repository
+    ]
+    dist_path = next((path for path in dist_candidates if path.is_dir()), None)
+    if dist_path:
         app.mount("/", StaticFiles(directory=dist_path, html=True), name="static")
 
     return app
 
 
 app = create_app()
-

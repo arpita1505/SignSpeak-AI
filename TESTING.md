@@ -45,11 +45,12 @@ npm run coverage
 
 ### 3. Integration Tests (E2E)
 
-**Framework:** Playwright (optional, not yet implemented)
+**Framework:** Playwright (implemented; camera, WebSocket, prediction, editing, speech, cleanup,
+and unavailable-model states are browser-tested with deterministic mocks)
 
 ```bash
-npx playwright install
-npx playwright test
+npx playwright install chromium
+npm run test:e2e
 ```
 
 ### 4. ML Pipeline Tests
@@ -65,11 +66,12 @@ python ml/collect_data.py --label A --samples 50
 # Test preprocessing
 python ml/prepare_dataset.py
 
-# Test training
-python ml/train.py --test  # Uses subset of data
+# Reproduce RealSign feature extraction and training only when inputs or pipeline change
+python ml/extract_realsign.py
+python ml/train_realsign.py
 
-# Test evaluation
-python ml/evaluate.py
+# Run held-out production-service samples without retraining
+python ml/sample_inference.py
 ```
 
 ### 5. Smoke Tests

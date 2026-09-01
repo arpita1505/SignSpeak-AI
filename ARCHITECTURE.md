@@ -45,7 +45,7 @@ SignSpeak AI follows a modular, three-tier architecture:
 │  │  ┌────────────────────────────────────────────┐    │   │
 │  │  │   ML Model Service                         │    │   │
 │  │  │  - sklearn Pipeline loaded                 │    │   │
-│  │  │  - Features: [64] → Classes: A-Z           │    │   │
+│  │  │  - Features: [126] → Classes: A-Z          │    │   │
 │  │  │  - Confidence scores                       │    │   │
 │  │  │                                            │    │   │
 │  │  └────────────────────────────────────────────┘    │   │

@@ -22,6 +22,10 @@
   display: block;
 }
 
+.video-hidden {
+  display: none;
+}
+
 .placeholder {
   position: absolute;
   inset: 0;

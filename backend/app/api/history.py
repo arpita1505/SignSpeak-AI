@@ -1,4 +1,5 @@
 """Translation history endpoints."""
+
 from __future__ import annotations
 
 import logging
@@ -16,9 +17,7 @@ router = APIRouter(prefix="/api/history", tags=["history"])
 
 
 @router.get("", response_model=list[TranslationResponse])
-async def get_history(
-    limit: int = 100, db: Session = Depends(get_db)
-) -> list[TranslationResponse]:
+async def get_history(limit: int = 100, db: Session = Depends(get_db)) -> list[TranslationResponse]:
     """Get all translation history."""
     try:
         return HistoryService.get_all_history(db, limit=limit)
@@ -57,9 +56,7 @@ async def get_history_by_id(
 
 
 @router.delete("/{history_id}")
-async def delete_history(
-    history_id: int, db: Session = Depends(get_db)
-) -> dict:
+async def delete_history(history_id: int, db: Session = Depends(get_db)) -> dict:
     """Delete a translation history entry."""
     try:
         if not HistoryService.delete_history(db, history_id):

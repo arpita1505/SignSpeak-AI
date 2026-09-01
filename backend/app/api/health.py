@@ -1,4 +1,5 @@
 """Health check endpoints."""
+
 import logging
 
 from fastapi import APIRouter

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   app:
     build:
@@ -19,11 +17,8 @@ services:
       STABILITY_MIN_COUNT: "4"
       SIGN_COOLDOWN_MS: "800"
       LOG_LEVEL: INFO
-    volumes:
-      - ./artifacts:/app/artifacts
-      - ./data:/app/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/api/health', timeout=5).raise_for_status()"]
       interval: 30s
       timeout: 10s
       retries: 3

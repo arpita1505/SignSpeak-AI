@@ -1,4 +1,5 @@
 """Tests for temporal smoothing service."""
+
 import pytest
 
 from app.services.smoothing_service import TemporalSmoothingService
@@ -7,9 +8,7 @@ from app.services.smoothing_service import TemporalSmoothingService
 @pytest.fixture
 def smoothing_service():
     """Create smoothing service instance."""
-    return TemporalSmoothingService(
-        stability_window=5, stability_min_count=4, cooldown_ms=800
-    )
+    return TemporalSmoothingService(stability_window=5, stability_min_count=4, cooldown_ms=800)
 
 
 def test_process_prediction_low_confidence(smoothing_service):

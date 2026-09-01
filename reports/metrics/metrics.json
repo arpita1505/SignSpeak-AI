@@ -1,0 +1,25 @@
+{
+  "validation": {
+    "RandomForestClassifier": {
+      "accuracy": 0.8737953189536485,
+      "precision_macro": 0.8795441393820711,
+      "recall_macro": 0.8644118475614009,
+      "macro_f1": 0.8598005974931413,
+      "weighted_f1": 0.8664544229551837
+    },
+    "SVC": {
+      "accuracy": 0.88022028453419,
+      "precision_macro": 0.8918437258431852,
+      "recall_macro": 0.8709560263745424,
+      "macro_f1": 0.8688197753614602,
+      "weighted_f1": 0.8779954512501116
+    }
+  },
+  "test": {
+    "accuracy": 0.9054787759131293,
+    "precision_macro": 0.9227612919942975,
+    "recall_macro": 0.905231379590083,
+    "macro_f1": 0.8967902795968558,
+    "weighted_f1": 0.9037465973214451
+  }
+}

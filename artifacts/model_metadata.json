@@ -1,0 +1,186 @@
+{
+  "version": "1.0.0-realsign",
+  "created_at": "2026-09-01T05:01:40.123099+00:00",
+  "dataset": "RealSign Indian Sign Language Dataset",
+  "dataset_source": "https://github.com/RealSign62/RealSign-Indian-Sign-Language-Dataset",
+  "dataset_license": "CC0-1.0",
+  "classifier": "SVC",
+  "algorithm": "SVC",
+  "scikit_learn_version": "1.6.1",
+  "feature_dimension": 126,
+  "supported_labels": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z"
+  ],
+  "feature_format": "21 x/y/z landmarks per hand; left then right; missing hand zero padded",
+  "normalization": "wrist translation; wrist-to-middle-fingertip scale; left/right slots; zero padding",
+  "split_method": "publisher directories after global exact-file deduplication; signer IDs unavailable",
+  "split_counts": {
+    "train": {
+      "samples": 16138,
+      "class_counts": {
+        "A": 688,
+        "B": 527,
+        "C": 568,
+        "D": 536,
+        "E": 635,
+        "F": 668,
+        "G": 632,
+        "H": 696,
+        "I": 609,
+        "J": 682,
+        "K": 659,
+        "L": 650,
+        "M": 684,
+        "N": 596,
+        "O": 499,
+        "P": 602,
+        "Q": 657,
+        "R": 689,
+        "S": 693,
+        "T": 693,
+        "U": 568,
+        "V": 525,
+        "W": 565,
+        "X": 695,
+        "Y": 622,
+        "Z": 500
+      },
+      "skipped": {
+        "no_hand": 1916,
+        "exact_duplicate": 144
+      }
+    },
+    "val": {
+      "samples": 2179,
+      "class_counts": {
+        "A": 92,
+        "B": 76,
+        "C": 87,
+        "D": 75,
+        "E": 89,
+        "F": 98,
+        "G": 91,
+        "H": 75,
+        "I": 91,
+        "J": 94,
+        "K": 75,
+        "L": 94,
+        "M": 97,
+        "N": 88,
+        "O": 80,
+        "P": 89,
+        "Q": 87,
+        "R": 74,
+        "S": 75,
+        "T": 76,
+        "U": 83,
+        "V": 75,
+        "W": 90,
+        "X": 98,
+        "Y": 55,
+        "Z": 75
+      },
+      "skipped": {
+        "no_hand": 291,
+        "exact_duplicate": 109
+      }
+    },
+    "test": {
+      "samples": 4052,
+      "class_counts": {
+        "A": 195,
+        "B": 150,
+        "C": 165,
+        "D": 141,
+        "E": 140,
+        "F": 142,
+        "G": 183,
+        "H": 150,
+        "I": 175,
+        "J": 149,
+        "K": 100,
+        "L": 190,
+        "M": 199,
+        "N": 169,
+        "O": 135,
+        "P": 173,
+        "Q": 148,
+        "R": 149,
+        "S": 151,
+        "T": 149,
+        "U": 157,
+        "V": 151,
+        "W": 179,
+        "X": 199,
+        "Y": 87,
+        "Z": 126
+      },
+      "skipped": {
+        "no_hand": 509,
+        "exact_duplicate": 638,
+        "corrupt": 1
+      }
+    }
+  },
+  "validation_metrics": {
+    "RandomForestClassifier": {
+      "accuracy": 0.8737953189536485,
+      "precision_macro": 0.8795441393820711,
+      "recall_macro": 0.8644118475614009,
+      "macro_f1": 0.8598005974931413,
+      "weighted_f1": 0.8664544229551837
+    },
+    "SVC": {
+      "accuracy": 0.88022028453419,
+      "precision_macro": 0.8918437258431852,
+      "recall_macro": 0.8709560263745424,
+      "macro_f1": 0.8688197753614602,
+      "weighted_f1": 0.8779954512501116
+    }
+  },
+  "training_times_seconds": {
+    "RandomForestClassifier": 3.16,
+    "SVC": 2.635
+  },
+  "test_metrics": {
+    "accuracy": 0.9054787759131293,
+    "precision_macro": 0.9227612919942975,
+    "recall_macro": 0.905231379590083,
+    "macro_f1": 0.8967902795968558,
+    "weighted_f1": 0.9037465973214451
+  },
+  "metrics": {
+    "accuracy": 0.9054787759131293,
+    "precision_macro": 0.9227612919942975,
+    "recall_macro": 0.905231379590083,
+    "macro_f1": 0.8967902795968558,
+    "weighted_f1": 0.9037465973214451
+  },
+  "random_seed": 42,
+  "confidence_threshold": 0.75
+}

@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     debug: bool = False
+    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     # Database
     database_url: str = ""  # Empty means use SQLite
@@ -38,7 +39,7 @@ class Settings(BaseSettings):
     def db_url(self) -> str:
         """Get database URL, defaulting to SQLite if not set."""
         if self.database_url:
-            return self.database_url
+            return self.database_url.replace("postgres://", "postgresql://", 1)
         # Use SQLite in project root
         return "sqlite:///./signspeak.db"
 
@@ -46,6 +47,11 @@ class Settings(BaseSettings):
     def is_production(self) -> bool:
         """Check if running in production mode."""
         return self.app_env == "production"
+
+    @property
+    def allowed_origins(self) -> list[str]:
+        """Configured browser origins; production frontend normally uses the same origin."""
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 
 settings = Settings()

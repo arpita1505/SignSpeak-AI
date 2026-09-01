@@ -50,22 +50,14 @@ export function CameraPanel({ onFrameCapture, onActiveChange }: CameraPanelProps
           </div>
         )}
 
-        {isActive && (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="video-element"
-            onLoadedMetadata={() => {
-              if (videoRef.current) {
-                const width = videoRef.current.videoWidth
-                const height = videoRef.current.videoHeight
-                console.log(`Camera resolution: ${width}x${height}`)
-              }
-            }}
-          />
-        )}
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          aria-label="Live camera preview"
+          className={`video-element ${isActive ? '' : 'video-hidden'}`}
+        />
 
         <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div>

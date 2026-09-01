@@ -34,14 +34,17 @@ RUN apt-get update && apt-get install -y \
     libxext6 \
     libxrender-dev \
     libgl1 \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy backend
 COPY backend/pyproject.toml .
 COPY backend/app ./app
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -e .
+# Install Python dependencies. Cache large native wheels across retries without adding them to the
+# final image layer; tolerate slow package mirrors.
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --default-timeout=1000 -e .
 
 # Copy ML artifacts
 COPY artifacts ./artifacts
@@ -55,7 +58,7 @@ USER appuser
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/api/health')" || exit 1
+    CMD python -c "import os, requests; requests.get('http://localhost:' + os.getenv('PORT', '8000') + '/api/health', timeout=5).raise_for_status()" || exit 1
 
 # Expose port
 EXPOSE 8000

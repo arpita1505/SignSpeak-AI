@@ -1,4 +1,5 @@
 """Tests for MediaPipe service."""
+
 import numpy as np
 import pytest
 

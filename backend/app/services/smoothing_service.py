@@ -1,4 +1,5 @@
 """Temporal smoothing for stable predictions."""
+
 from __future__ import annotations
 
 import logging
@@ -39,9 +40,7 @@ class TemporalSmoothingService:
         self.last_emit_time: float = 0.0
         self.released_since_emit = True
 
-    def process_prediction(
-        self, sign: str | None, confidence: float
-    ) -> tuple[str | None, bool]:
+    def process_prediction(self, sign: str | None, confidence: float) -> tuple[str | None, bool]:
         """
         Process a prediction with temporal smoothing.
 

@@ -1,4 +1,5 @@
 """MediaPipe hand landmark detection service."""
+
 from __future__ import annotations
 
 import logging
@@ -13,20 +14,22 @@ logger = logging.getLogger(__name__)
 class MediaPipeService:
     """Service for hand landmark detection using MediaPipe."""
 
-    def __init__(self, initialize_detector: bool = True):
+    def __init__(self, initialize_detector: bool = True, static_image_mode: bool = False):
         """Initialize MediaPipe hand detector."""
-        self.hands = mp.solutions.hands.Hands(
-            static_image_mode=False,
-            max_num_hands=2,
-            min_detection_confidence=0.5,
-            min_tracking_confidence=0.5,
-        ) if initialize_detector else None
+        self.hands = (
+            mp.solutions.hands.Hands(
+                static_image_mode=static_image_mode,
+                max_num_hands=2,
+                min_detection_confidence=0.5,
+                min_tracking_confidence=0.5,
+            )
+            if initialize_detector
+            else None
+        )
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_hands = mp.solutions.hands
 
-    def detect_landmarks(
-        self, frame: np.ndarray
-    ) -> tuple[list | None, list | None, list | None]:
+    def detect_landmarks(self, frame: np.ndarray) -> tuple[list | None, list | None, list | None]:
         """
         Detect hand landmarks from a frame.
 
@@ -73,9 +76,7 @@ class MediaPipeService:
             logger.error(f"Error detecting landmarks: {e}")
             return None, None, None
 
-    def draw_landmarks(
-        self, frame: np.ndarray, landmarks_list: list | None
-    ) -> np.ndarray:
+    def draw_landmarks(self, frame: np.ndarray, landmarks_list: list | None) -> np.ndarray:
         """
         Draw landmarks on frame.
 
@@ -95,6 +96,7 @@ class MediaPipeService:
                 reshaped = []
                 for i in range(0, len(landmarks), 3):
                     x, y, z = landmarks[i : i + 3]
+
                     # Create a simple landmark-like object
                     class LandmarkObj:
                         pass

@@ -1,4 +1,5 @@
 """Model loading and inference service."""
+
 from __future__ import annotations
 
 import json
@@ -73,8 +74,9 @@ class ModelService:
 
         try:
             # Validate feature dimension
-            if len(features) != 126:
-                logger.warning(f"Invalid feature dimension: {len(features)}, expected 126")
+            expected = int((self.metadata or {}).get("feature_dimension", 126))
+            if len(features) != expected:
+                logger.warning(f"Invalid feature dimension: {len(features)}, expected {expected}")
                 return None, 0.0
 
             # Reshape for sklearn model

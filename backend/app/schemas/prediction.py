@@ -1,4 +1,5 @@
 """Pydantic schemas for API requests/responses."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -35,7 +36,7 @@ class PredictionFrame(BaseModel):
 class PredictionResponse(BaseModel):
     """Prediction response from WebSocket."""
 
-    type: str  # "prediction", "no_hand", "low_confidence", "error"
+    type: str  # prediction, no_hand, low_confidence, model_unavailable, error
     sign: str | None = None
     confidence: float | None = None
     stable: bool | None = None
