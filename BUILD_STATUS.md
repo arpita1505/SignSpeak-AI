@@ -89,8 +89,10 @@ spin down after inactivity and can have a cold-start delay.
 - ✅ `frontend/src/App.css` - Layout styles
 - ✅ `frontend/src/components/*.css` - Component styles (4 files)
 
-**Tests (1 file)**
+**Tests (3 files)**
 - ✅ `frontend/src/components/Header.test.tsx` - Component tests (2 tests)
+- ✅ `frontend/src/components/PredictionCard.test.tsx` - Component tests (2 tests)
+- ✅ `frontend/src/components/TranslationPanel.test.tsx` - Component tests (3 tests)
 
 ### ML Pipeline (Python) ✅
 
@@ -206,7 +208,7 @@ signspeak-ai/
 - **Server:** Uvicorn
 - **Database:** SQLAlchemy 2.0.0 (SQLite/PostgreSQL)
 - **Validation:** Pydantic 2.0.0
-- **ML:** scikit-learn 1.3.0, MediaPipe 0.14.0
+- **ML:** scikit-learn 1.6.1, MediaPipe 0.10.18
 - **Image Processing:** OpenCV 4.8.0
 - **Model Serialization:** joblib
 - **Testing:** pytest 7.4.0
@@ -249,9 +251,10 @@ signspeak-ai/
 | Component | Files | Lines | Tests |
 |-----------|-------|-------|-------|
 | Backend | 25 | ~2,500 | 19 |
-| Frontend | 30 | ~2,000 | 2+ |
+| Frontend | 30 | ~2,000 | 7 |
 | ML Pipeline | 5 | ~500 | Implicit |
-| **Total** | **60+** | **~5,000** | **21+** |
+| E2E (Playwright) | 1 | ~50 | 2 |
+| **Total** | **60+** | **~5,000** | **28** |
 
 ## Build Phases Completed
 
@@ -413,4 +416,4 @@ signspeak-ai/
 **Verification Report Version:** 1.0  
 **Build Status:** ✅ COMPLETE  
 **Ready for Testing:** YES  
-**Date:** 2024
+**Date:** 2026-09-05

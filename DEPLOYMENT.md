@@ -201,7 +201,7 @@ Response:
 {
   "status": "ok",
   "model_loaded": true,
-  "model_version": "1.0.0",
+  "model_version": "1.0.0-realsign",
   "database": "ok"
 }
 ```
@@ -215,7 +215,7 @@ Logs appear in Render dashboard:
 ```
 2024-01-01T12:00:00Z - Application starting up...
 2024-01-01T12:00:01Z - Database initialized: sqlite:///./signspeak.db
-2024-01-01T12:00:02Z - Model loaded: version 1.0.0
+2024-01-01T12:00:02Z - Model loaded: version 1.0.0-realsign
 2024-01-01T12:00:03Z - Uvicorn running at 0.0.0.0:8000
 ```
 
@@ -515,4 +515,4 @@ curl -X POST https://your-domain/api/history \
 ---
 
 **Deployment Documentation Version:** 1.0  
-**Last Updated:** 2024
+**Last Updated:** 2026-09-05
